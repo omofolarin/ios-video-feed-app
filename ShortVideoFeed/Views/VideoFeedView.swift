@@ -33,25 +33,26 @@ struct VideoFeedView: View {
                     .cornerRadius(8)
                 }
             } else {
-                TabView(selection: $viewModel.currentIndex) {
-                    ForEach(0..<viewModel.videos.count, id: \.self) { index in
-                        let video = viewModel.videos[index]
-                        if viewModel.visibleRange.contains(index) {
-                            VideoItemView(
-                                video: video,
-                                isLiked: viewModel.isLiked(video),
-                                likeCount: viewModel.likeCount(for: video),
-                                onLike: { viewModel.toggleLike(for: video) },
-                                onUsernameTap: { selectedVideoForProfile = video }
-                            )
-                            .tag(index)
-                        } else {
-                            Color.black
-                                .tag(index)
+                GeometryReader { geometry in
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 0) {
+                            ForEach(0..<viewModel.videos.count, id: \.self) { index in
+                                let video = viewModel.videos[index]
+                                VideoItemView(
+                                    video: video,
+                                    isLiked: viewModel.isLiked(video),
+                                    likeCount: viewModel.likeCount(for: video),
+                                    onLike: { viewModel.toggleLike(for: video) },
+                                    onUsernameTap: { selectedVideoForProfile = video }
+                                )
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .id(index)
+                            }
                         }
                     }
+                    .scrollTargetBehavior(.paging)
+                    .ignoresSafeArea()
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
                 .ignoresSafeArea()
             }
         }
@@ -72,70 +73,73 @@ struct VideoItemView: View {
     let onUsernameTap: () -> Void
     
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            VideoPlayerView(video: video)
-            
-            // Overlay UI
-            VStack(alignment: .leading, spacing: 12) {
-                Spacer()
+        GeometryReader { geometry in
+            ZStack(alignment: .bottomLeading) {
+                VideoPlayerView(video: video)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
                 
-                // Username
-                Button(action: onUsernameTap) {
-                    Text("@\(video.username)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                }
-                
-                // Caption
-                if let caption = video.caption {
-                    Text(caption)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
-                        .lineLimit(2)
-                }
-            }
-            .padding(.leading, 16)
-            .padding(.bottom, 80)
-            
-            // Action buttons
-            VStack(spacing: 24) {
-                Spacer()
-                
-                // Like button
-                VStack(spacing: 4) {
-                    Button(action: onLike) {
-                        Image(systemName: isLiked ? "heart.fill" : "heart")
-                            .font(.system(size: 32))
-                            .foregroundColor(isLiked ? .red : .white)
+                // Overlay UI
+                VStack(alignment: .leading, spacing: 12) {
+                    Spacer()
+                    
+                    // Username
+                    Button(action: onUsernameTap) {
+                        Text("@\(video.username)")
+                            .font(.headline)
+                            .foregroundColor(.white)
                     }
-                    Text("\(likeCount)")
-                        .font(.caption)
-                        .foregroundColor(.white)
+                    
+                    // Caption
+                    if let caption = video.caption {
+                        Text(caption)
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+                    }
                 }
+                .padding(.leading, 16)
+                .padding(.bottom, 80)
                 
-                // Comment button
-                VStack(spacing: 4) {
-                    Image(systemName: "bubble.right")
-                        .font(.system(size: 32))
-                        .foregroundColor(.white)
-                    Text("0")
-                        .font(.caption)
-                        .foregroundColor(.white)
+                // Action buttons
+                VStack(spacing: 24) {
+                    Spacer()
+                    
+                    // Like button
+                    VStack(spacing: 4) {
+                        Button(action: onLike) {
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                .font(.system(size: 32))
+                                .foregroundColor(isLiked ? .red : .white)
+                        }
+                        Text("\(likeCount)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
+                    
+                    // Comment button
+                    VStack(spacing: 4) {
+                        Image(systemName: "bubble.right")
+                            .font(.system(size: 32))
+                            .foregroundColor(.white)
+                        Text("0")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
+                    
+                    // Share button
+                    VStack(spacing: 4) {
+                        Image(systemName: "arrowshape.turn.up.right")
+                            .font(.system(size: 32))
+                            .foregroundColor(.white)
+                        Text("Share")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
                 }
-                
-                // Share button
-                VStack(spacing: 4) {
-                    Image(systemName: "arrowshape.turn.up.right")
-                        .font(.system(size: 32))
-                        .foregroundColor(.white)
-                    Text("Share")
-                        .font(.caption)
-                        .foregroundColor(.white)
-                }
+                .padding(.trailing, 16)
+                .padding(.bottom, 80)
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .padding(.trailing, 16)
-            .padding(.bottom, 80)
-            .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 }

@@ -12,8 +12,8 @@ class VideoFeedViewModel: ObservableObject {
     private let likeStore = LikeStore()
     
     var visibleRange: Range<Int> {
-        let start = max(0, currentIndex - 2)
-        let end = min(videos.count, currentIndex + 3)
+        let start = max(0, currentIndex - 5)
+        let end = min(videos.count, currentIndex + 6)
         return start..<end
     }
     

@@ -35,6 +35,7 @@ struct VideoPlayerView: View {
                 }
             } else if let player = playerManager.player {
                 VideoPlayer(player: player)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .ignoresSafeArea()
                     .onAppear {
                         playerManager.play()
@@ -44,6 +45,8 @@ struct VideoPlayerView: View {
                     }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black)
     }
 }
 
