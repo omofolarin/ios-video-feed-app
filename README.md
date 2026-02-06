@@ -4,14 +4,14 @@ A TikTok-style vertical video feed app built with SwiftUI, featuring smooth scro
 
 ## Features
 
-- ✅ Full-screen vertical video feed with swipe navigation
-- ✅ Autoplay with resource management
-- ✅ Like/comment/share UI with persistent likes
-- ✅ Profile screen with video grid
-- ✅ Efficient windowed loading (only 5 videos loaded at once)
-- ✅ Two-tier video caching (memory + disk)
-- ✅ Error handling with retry
-- ✅ Unit tests for core logic
+-  Full-screen vertical video feed with swipe navigation
+-  Autoplay with resource management
+-  Like/comment/share UI with persistent likes
+-  Profile screen with video grid
+-  Efficient windowed loading (only 5 videos loaded at once)
+-  Two-tier video caching (memory + disk)
+-  Error handling with retry
+-  Unit tests for core logic
 
 ## Setup Instructions
 
@@ -211,10 +211,10 @@ deinit {
 ## Testing
 
 ### Unit Tests Coverage
-- ✅ Video JSON parsing (with/without optional fields)
-- ✅ LikeStore persistence and toggle logic
-- ✅ VideoFeedViewModel windowed loading
-- ✅ Edge cases (start/middle/end of feed)
+-  Video JSON parsing (with/without optional fields)
+-  LikeStore persistence and toggle logic
+-  VideoFeedViewModel windowed loading
+-  Edge cases (start/middle/end of feed)
 
 ### Test Results
 ```bash
